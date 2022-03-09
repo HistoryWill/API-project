@@ -1,0 +1,77 @@
+package com.cognixia.jump.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "users")
+public class User {
+
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+private Long id;
+
+@NotBlank
+private String username;
+@NotBlank
+private String password;
+
+@NotBlank
+private int accountId;
+
+private Roles role;
+
+public User(Long id, @NotBlank String username, @NotBlank String password, @NotBlank int accountId) {
+	super();
+	this.id = id;
+	this.username = username;
+	this.password = password;
+	this.accountId = accountId;
+}
+
+public Long getId() {
+	return id;
+}
+
+public void setId(Long id) {
+	this.id = id;
+}
+
+public String getUsername() {
+	return username;
+}
+
+public void setUsername(String username) {
+	this.username = username;
+}
+
+public String getPassword() {
+	return password;
+}
+
+public void setPassword(String password) {
+	this.password = password;
+}
+
+public int getAccountId() {
+	return accountId;
+}
+
+public void setAccountId(int accountId) {
+	this.accountId = accountId;
+}
+
+public Roles getRole() {
+	return role;
+}
+
+public void setRole(Roles role) {
+	this.role = role;
+}
+
+
+}
