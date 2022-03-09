@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
 
 @Id
-private Long id;
+private String id;
 
 @NotBlank
 private String username;
@@ -21,7 +21,9 @@ private String password;
 private int accountId;
 
 @NotBlank
-private Roles role;
+private String role;
+
+private Roles roles;
 
 @NotBlank
 private boolean enabled;
@@ -33,19 +35,20 @@ public void setEnabled(boolean enabled) {
 	this.enabled = enabled;
 }
 
-public User(Long id, @NotBlank String username, @NotBlank String password, @NotBlank int accountId) {
+public User(String id, @NotBlank String username, @NotBlank String password, @NotBlank int accountId, @NotBlank String role) {
 	super();
 	this.id = id;
 	this.username = username;
 	this.password = password;
 	this.accountId = accountId;
+	this.roles = Roles.valueOf(role);
 }
 
-public Long getId() {
+public String getId() {
 	return id;
 }
 
-public void setId(Long id) {
+public void setId(String id) {
 	this.id = id;
 }
 
@@ -74,11 +77,11 @@ public void setAccountId(int accountId) {
 }
 
 public Roles getRole() {
-	return role;
+	return roles;
 }
 
 public void setRole(Roles role) {
-	this.role = role;
+	this.roles = role;
 }
 
 
