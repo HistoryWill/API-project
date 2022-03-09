@@ -1,6 +1,10 @@
 package com.cognixia.jump.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.saml2.Saml2RelyingPartyProperties.Registration.Signing;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cognixia.jump.model.Account;
 import com.cognixia.jump.model.AuthenticationRequest;
 import com.cognixia.jump.model.AuthenticationResponse;
+import com.cognixia.jump.model.SignupRequest;
 import com.cognixia.jump.model.User;
+import com.cognixia.jump.repository.UserRepository;
+import com.cognixia.jump.service.UserDetailsServiceImpl;
 import com.cognixia.jump.util.JwtUtil;
 @RequestMapping("/api/auth")
 @RestController
@@ -29,49 +37,40 @@ public class AuthenticationController {
 	UserDetailsService userDetailsService;
 	
 	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
 	JwtUtil jwtUtil;
+	@Autowired
+	MongoTemplate mt;
 	
 	@PostMapping("/authenticate")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest request) throws Exception{
-		try {
-            Authentication authenticate = authenticationManager
-                .authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                        request.getUsername(), request.getPassword()
-                    )
-                );
-            
-		 } catch (BadCredentialsException ex) {
-	        	throw new Exception("Incorrect username or password");
-	        }
-            final UserDetails userDetails = userDetailsService.loadUserByUsername( request.getUsername() );
-    		
-    		// generate the token for that user
-    		final String jwt = jwtUtil.generateTokens(userDetails);
-    		
-    		
-       
-		return ResponseEntity.status(201).body( new AuthenticationResponse(jwt) );
-////		try {
-//			System.out.print(request.getUsername());
-//			final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-//			System.out.println(userDetails.getPassword());	
-//			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-////			final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-//			//System.out.print(userDetails.getUsername());
-//			final String jwt = jwtUtil.generateTokens(userDetails);
-//			
-////			
-////		}catch(BadCredentialsException e) {
-////			throw new Exception("Bad Password");
-////		}
-////		final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-////		System.out.print(userDetails);
-////		final String jwt = jwtUtil.generateTokens(userDetails);
-////		
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthenticationRequest request) throws Exception{
+
 		
-	//	return ResponseEntity.status(201).body( new AuthenticationResponse(jwt) );
+
+		
+		return ResponseEntity.status(201).body( new AuthenticationResponse(jwt) );
 		
 	}
+	
+	
+	@PostMapping("/signup")
+	public ResponseEntity<?> RegisterUser(@RequestBody SignupRequest signupRequest  ){
+		if(userRepository.existsByUsername(signupRequest.getUsername())) {
+			return ResponseEntity.badRequest().body("Error: Username taken");
+		}
+		
+		User user = new User(signupRequest.getUsername(),signupRequest.getPassword(), "ROLE_USER");
+		Account account = new Account(signupRequest.getUsername());
+		mt.save(user);
+		mt.save(account);
+		
+		
+		return ResponseEntity.ok().body("User Registered!");
+		
+	}
+
+//	
 	
 }

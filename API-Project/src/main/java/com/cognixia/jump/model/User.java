@@ -17,8 +17,6 @@ private String username;
 @NotBlank
 private String password;
 
-@NotBlank
-private int accountId;
 
 @NotBlank
 private String role;
@@ -35,12 +33,12 @@ public void setEnabled(boolean enabled) {
 	this.enabled = enabled;
 }
 
-public User(String id, @NotBlank String username, @NotBlank String password, @NotBlank int accountId, @NotBlank String role) {
+public User( @NotBlank String username, @NotBlank String password, @NotBlank String role) {
 	super();
-	this.id = id;
+	
 	this.username = username;
 	this.password = password;
-	this.accountId = accountId;
+	
 	this.roles = Roles.valueOf(role);
 }
 
@@ -68,13 +66,7 @@ public void setPassword(String password) {
 	this.password = password;
 }
 
-public int getAccountId() {
-	return accountId;
-}
 
-public void setAccountId(int accountId) {
-	this.accountId = accountId;
-}
 
 public Roles getRole() {
 	return roles;

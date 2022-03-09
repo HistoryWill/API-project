@@ -33,7 +33,7 @@ public class UserPrincipal implements UserDetails {
 		super();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
-		this.accountid =user.getAccountId();
+		
 		// set up the list of granted authorities by accessing the user's role(s)
 		this.authorities = Arrays.asList( new SimpleGrantedAuthority( user.getRole().name() ) );
 	}
