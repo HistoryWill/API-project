@@ -50,7 +50,7 @@ public class AuthenticationController {
 		
 
 		
-		return ResponseEntity.status(201).body( new AuthenticationResponse(jwt) );
+		return ResponseEntity.status(201).body("THANG");
 		
 	}
 	

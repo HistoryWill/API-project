@@ -20,15 +20,16 @@ public class Account {
 	
 	ArrayList<String> Items;
 
-	public Account( @NotBlank String username) {
+	public Account( @NotBlank String username, ArrayList<String> Items) {
 		super();
 		this.id = id;
 		this.username = username;
+		this.Items = Items;
 		
 	}
 
 	
-	public Account(String id, @NotBlank String username) {
+	public Account(@NotBlank String username) {
 		super();
 		this.id = id;
 		this.username = username;
