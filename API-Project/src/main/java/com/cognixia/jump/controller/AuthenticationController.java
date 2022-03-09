@@ -37,6 +37,9 @@ public class AuthenticationController {
 	UserDetailsService userDetailsService;
 	
 	@Autowired
+	UserDetailsServiceImpl userDetailsServiceImpl;
+	
+	@Autowired
 	UserRepository userRepository;
 	
 	@Autowired
@@ -47,10 +50,22 @@ public class AuthenticationController {
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthenticationRequest request) throws Exception{
 
+		Authentication authentication;
+		try {
+		authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+		}catch(BadCredentialsException e) {
+			throw new Exception("Bad Password");
+		}
 		
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(request.getUsername());
+		String jwt = jwtUtil.generateTokens(userDetails);
+		
+		UserDetailsServiceImpl userDetailsImpl = (UserDetailsServiceImpl) authentication.getPrincipal();
 
 		
-		return ResponseEntity.status(201).body("THANG");
+		return ResponseEntity.status(201).body(jwt);
 		
 	}
 	

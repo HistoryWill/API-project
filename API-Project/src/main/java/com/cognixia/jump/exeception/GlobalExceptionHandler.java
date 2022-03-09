@@ -18,11 +18,11 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 	}
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<?> userNameInUse(ResourceNotFoundException ex, WebRequest request) {
-		
-		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-		
-		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
-	}
+//	@ExceptionHandler(ResourceNotFoundException.class)
+//	public ResponseEntity<?> userNameInUse(ResourceNotFoundException ex, WebRequest request) {
+//		
+//		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+//		
+//		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+//	}
 }
