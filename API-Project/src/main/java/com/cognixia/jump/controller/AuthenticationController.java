@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,6 +50,7 @@ public class AuthenticationController {
 	
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthenticationRequest request) throws Exception{
+		UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(request.getUsername());
 
 		Authentication authentication;
 		try {
@@ -56,14 +58,15 @@ public class AuthenticationController {
 				new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 		}catch(BadCredentialsException e) {
 			throw new Exception("Bad Password");
+		}catch(DisabledException e) {
+		
+			throw new Exception("Disabled!");
 		}
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(request.getUsername());
 		String jwt = jwtUtil.generateTokens(userDetails);
 		
-		UserDetailsServiceImpl userDetailsImpl = (UserDetailsServiceImpl) authentication.getPrincipal();
-
+		
 		
 		return ResponseEntity.status(201).body(jwt);
 		

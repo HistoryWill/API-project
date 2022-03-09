@@ -29,8 +29,8 @@ import com.cognixia.jump.repository.UserRepository;
 @RequestMapping("/api/accounts")
 @RestController
 public class AcccountController {
-	@Autowired
-	AuthenticationManager authenticationManager;
+
+
 	
 	@Autowired
 	UserDetailsService userDetailsService;
@@ -42,13 +42,13 @@ public class AcccountController {
 	@Autowired
 	MongoTemplate mt;
 	
-	@GetMapping("/account/{username}")
+	@GetMapping("/{username}")
 	public Optional<Account> getAccount(@PathVariable String username) {
 		Optional<Account> account = accountRepository.findByUsername(username);
 		return account;
 	}
 	//Adds elements to the item list
-	@PutMapping("/update/Account")
+	@PutMapping("/update/")
 	public ResponseEntity<Account> updateAccount(@RequestBody Account account){
 		
 		Query query = new Query();
@@ -59,7 +59,7 @@ public class AcccountController {
 		return new ResponseEntity<>( HttpStatus.OK);	
 	}
 	//Removes Items from item list
-	@DeleteMapping("/delete/Account/{username}")
+	@DeleteMapping("/delete/")
 	public ResponseEntity<Account> removeAccount(@RequestBody Account account) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("username").is(account.getUsername()));

@@ -38,7 +38,7 @@ public User( @NotBlank String username, @NotBlank String password, @NotBlank Str
 	
 	this.username = username;
 	this.password = password;
-	
+	this.enabled = true;
 	this.roles = Roles.valueOf(role);
 }
 
