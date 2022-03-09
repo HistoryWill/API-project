@@ -23,7 +23,18 @@ private String password;
 @NotBlank
 private int accountId;
 
+@NotBlank
 private Roles role;
+
+@NotBlank
+private boolean enabled;
+public boolean isEnabled() {
+	return enabled;
+}
+
+public void setEnabled(boolean enabled) {
+	this.enabled = enabled;
+}
 
 public User(Long id, @NotBlank String username, @NotBlank String password, @NotBlank int accountId) {
 	super();
