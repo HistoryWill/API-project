@@ -1,18 +1,15 @@
 package com.cognixia.jump.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "users")
+@Document("users")
 public class User {
 
 @Id
-@GeneratedValue(strategy = GenerationType.AUTO)
 private Long id;
 
 @NotBlank
